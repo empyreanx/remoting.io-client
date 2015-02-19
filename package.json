@@ -1,0 +1,41 @@
+{
+  "name": "remoting.io-client",
+  "description": "Simple and transparent remote procedure calls using Engine.IO.",
+  "version": "0.1.0",
+  "homepage": "http://remoting.io",
+  "author": {
+    "name": "James McLean",
+    "url": "http://remoting.io"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/jrimclean/remoting.io.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jrimclean/remoting.io/issues"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "git://github.com/jrimclean/remoting.io/blob/master/LICENSE.md"
+    }
+  ],
+  "main": "index.js",
+  "engines": {
+    "node": ">= 0.8.0"
+  },
+  "scripts": {
+    "test": "grunt"
+  },
+  "devDependencies": {
+    "grunt-contrib-jshint": "~0.6.4",
+    "grunt-contrib-watch": "~0.5.3",
+    "grunt": "~0.4.5",
+    "mocha": "~2.1.0",
+    "expect.js": "~0.3.1"
+  },
+  "keywords": [],
+  "dependencies": {
+    "heir": "~3.0.0"
+  }
+}
