@@ -29,11 +29,18 @@ module.exports = function(grunt) {
 				files: '<%= jshint.test.src %>',
 				tasks: ['jshint:test']
 			}
+		},
+		exec: {
+			zuul: {
+				cmd: './node_modules/zuul/bin/zuul --local 8080 --ui mocha-bdd -- test/client.js'
+			}
 		}
 	});
 	
 	grunt.loadNpmTasks('grunt-contrib-jshint');
 	grunt.loadNpmTasks('grunt-contrib-watch');
+	grunt.loadNpmTasks('grunt-exec');
 	
 	grunt.registerTask('default', ['jshint']);
+	grunt.registerTask('test', ['jshint', 'exec:zuul']);
 };
