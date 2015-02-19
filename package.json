@@ -32,7 +32,8 @@
     "grunt-exec": "~0.4.6",
     "zuul": "~1.19.0",
     "promise": "~6.1.0",
-    "heir": "~3.0.0"
+    "heir": "~3.0.0",
+    "component-emitter": "~1.2.0"
   },
   "keywords": [],
   "dependencies": {
