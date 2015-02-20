@@ -1,8 +1,6 @@
 var expect = require('expect.js');
 var emitter = require('component-emitter');
 
-var Client = require('../lib/client');
-
 function MockSocket () {
 }
 
@@ -13,7 +11,7 @@ describe('client', function () {
 	
 	beforeEach(function () {
 		socket = new MockSocket();
-		client = new Client(socket);
+		client = io.remoting(socket);
 	});
 	
 	it('should request service list and handle response', function (done) {

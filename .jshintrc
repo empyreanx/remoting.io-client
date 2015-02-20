@@ -13,6 +13,10 @@
   "node": true,
 
   "globals"   : {
+    /* TEST */
+    "window"     : true,
+    "io"         : true,
+
     /* MOCHA */
     "describe"   : false,
     "it"         : false,

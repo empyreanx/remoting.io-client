@@ -15,7 +15,7 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-      'test/**/*.js'
+      'remoting.io.js', 'test/**/*.js'
     ],
 
 
@@ -31,8 +31,7 @@ module.exports = function(config) {
     },
 
 	browserify: {
-		debug: true//,
-		//transform: [ 'brfs' ]
+		debug: true
     },
 
 

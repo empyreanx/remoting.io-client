@@ -30,11 +30,23 @@ module.exports = function(grunt) {
 				tasks: ['jshint:test']
 			}
 		},
-		/*exec: {
-			zuul: {
-				cmd: './node_modules/zuul/bin/zuul --local 8080 --ui mocha-bdd -- test/client.js'
+		browserify: {
+			prod: {
+				files: {
+					'tmp/remoting.io.js': ['lib/index.js']
+				},
+				options: {
+					transform: ['uglifyify']
+				}
 			}
-		}*/
+		},
+		uglify: {
+			prod: {
+				files: {
+					'remoting.io.js': 'tmp/remoting.io.js'
+				}
+			}
+		},
 		karma: {
 			unit: {
 				configFile: 'karma.conf.js'
@@ -44,10 +56,10 @@ module.exports = function(grunt) {
 	
 	grunt.loadNpmTasks('grunt-contrib-jshint');
 	grunt.loadNpmTasks('grunt-contrib-watch');
+	grunt.loadNpmTasks('grunt-contrib-uglify');
+	grunt.loadNpmTasks('grunt-browserify');
 	grunt.loadNpmTasks('grunt-karma');
-	//grunt.loadNpmTasks('grunt-exec');
 	
-	grunt.registerTask('default', ['jshint']);
-	//grunt.registerTask('test', ['jshint', 'exec:zuul']);
-	grunt.registerTask('test', ['jshint', 'karma:unit']);
+	grunt.registerTask('default', ['jshint', 'browserify:prod', 'uglify:prod']);
+	grunt.registerTask('test', ['jshint', 'browserify:prod', 'uglify:prod', 'karma:unit']);
 };
