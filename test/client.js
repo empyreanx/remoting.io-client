@@ -27,4 +27,18 @@ describe('client', function () {
 			done();
 		});
 	});
+	
+	it('should request exports list and handle response', function (done) {
+		var response = { id: 0, type: 'exports', exports: ['test1', 'test2'] };
+		
+		socket.send = function (object) {
+			expect(object).to.eql({ id: 0, type: 'exports', service: 'TestService' });
+			socket.emit('message', JSON.stringify(response));
+		};
+		
+		client.exports('TestService').done(function (result) {
+			expect(result).to.eql(response.exports);
+			done();
+		});
+	});
 });
