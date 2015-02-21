@@ -21,7 +21,7 @@
     }
   ],
   "scripts": {
-    "test": "grunt"
+    "test": "grunt test"
   },
   "devDependencies": {
     "grunt-contrib-jshint": "~0.6.4",
@@ -29,10 +29,6 @@
     "grunt": "~0.4.5",
     "mocha": "~2.1.0",
     "expect.js": "~0.3.1",
-    "grunt-exec": "~0.4.6",
-    "zuul": "~1.19.0",
-    "promise": "~6.1.0",
-    "heir": "~3.0.0",
     "component-emitter": "~1.2.0",
     "karma": "~0.12.31",
     "karma-mocha": "~0.1.10",
@@ -44,8 +40,5 @@
     "uglifyify": "~3.0.1",
     "es6-promise": "~2.0.1"
   },
-  "keywords": [],
-  "dependencies": {
-    "heir": "~3.0.0"
-  }
+  "keywords": []
 }
