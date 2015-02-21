@@ -70,4 +70,18 @@ describe('client', function () {
 			done();
 		});
 	});
+	
+	it('should request instance and return a proxy', function (done) {
+		var response = { id: 0, type: 'instance', result: { instance: 0, exports: ['test1', 'test2'] } };
+		
+		socket.send = function (object) {
+			expect(object).to.eql({ id: 0, type: 'instance', service: 'TestService' });
+			socket.emit('message', JSON.stringify(response));
+		};
+		
+		client.instance('TestService').then(function (proxy) {
+			expect(proxy.constructor.name).to.be('Proxy');
+			done();
+		});
+	});
 });

@@ -2,6 +2,7 @@
 'use strict';
 
 var Promise = require('es6-promise').Promise;
+var Proxy = require('./proxy');
 var NamedError = require('./namederror');
 
 function Client(socket) {
@@ -65,9 +66,27 @@ Client.prototype.exports = function (serviceName) {
 	return promise;
 };
 
+Client.prototype.instance = function (serviceName) {
+	var id = this.nextId();
+	
+	var promise = this.responsePromise(id, 'instance');
+	
+	this.socket.send({ id: id, type: 'instance', service: serviceName });
+	
+	var that = this;
+	
+	return new Promise(function (resolve, reject) {
+		promise.then(function (result) {
+			resolve(new Proxy(that, result.instance, result.exports));
+		}).catch(function (error) {
+			reject(error);
+		});
+	});
+};
+
 module.exports = Client;
 
-},{"./namederror":3,"es6-promise":4}],2:[function(require,module,exports){
+},{"./namederror":3,"./proxy":4,"es6-promise":5}],2:[function(require,module,exports){
 if (window) {
 	window.io = window.io || {};
 	
@@ -96,6 +115,17 @@ NamedError.prototype.constructor = NamedError;
 module.exports = NamedError;
 
 },{}],4:[function(require,module,exports){
+'use strict';
+
+function Proxy(client, instanceId, exports) {
+	this.client = client;
+	this.instanceId = instanceId;
+	this.exports = exports;
+}
+
+module.exports = Proxy;
+
+},{}],5:[function(require,module,exports){
 (function (process,global){
 /*!
  * @overview es6-promise - a tiny implementation of Promises/A+.
@@ -1058,7 +1088,7 @@ module.exports = NamedError;
     }
 }).call(this);
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"_process":5}],5:[function(require,module,exports){
+},{"_process":6}],6:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
