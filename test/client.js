@@ -71,6 +71,20 @@ describe('client', function () {
 		});
 	});
 	
+	it('should properly send and handle an invocation request', function (done) {
+		var response = { id: 0, type: 'invoke', result: { a: 'a', bc: ['b', 'c'] } };
+		
+		socket.send = function (object) {
+			expect(object).to.eql({ id: 0, type: 'invoke', instance: 0, method: 'test', args: ['arg1', 'arg2'] });
+			socket.emit('message', JSON.stringify(response));
+		};
+		
+		client.invoke(0, 'test', ['arg1', 'arg2']).then(function (result) {
+			expect(result).to.eql(response.result);
+			done();
+		});
+	});
+	
 	it('should request instance and return a proxy', function (done) {
 		var response = { id: 0, type: 'instance', result: { instance: 0, exports: ['test1', 'test2'] } };
 		
@@ -84,6 +98,12 @@ describe('client', function () {
 			expect(proxy.test1).to.be.a('function');
 			expect(proxy.test2).to.be.a('function');
 			done();
+		});
+	});
+	
+	describe('proxy', function () {
+		beforeEach(function () {
+			
 		});
 	});
 });

@@ -84,6 +84,17 @@ Client.prototype.instance = function (serviceName) {
 	});
 };
 
+Client.prototype.invoke = function (instanceId, method, args) {
+	var id = this.nextId();
+	
+	var promise = this.responsePromise(id, 'invoke');
+	
+	this.socket.send({ id: id, type: 'invoke', instance: instanceId, method: method, args: args });
+	
+	return promise;
+};
+
+
 module.exports = Client;
 
 },{"./namederror":3,"./proxy":4,"es6-promise":5}],2:[function(require,module,exports){
