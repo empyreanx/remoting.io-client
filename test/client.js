@@ -16,7 +16,7 @@ describe('client', function () {
 	
 	describe('services', function () {
 		it('should request service list and handle response', function (done) {
-			var response = { id: 0, type: 'services', services: ['TestService1', 'TestService2'] };
+			var response = { id: 0, type: 'services', result: ['TestService1', 'TestService2'] };
 			
 			socket.send = function (object) {
 				expect(object).to.eql({ id: 0, type: 'services' });
@@ -24,7 +24,7 @@ describe('client', function () {
 			};
 			
 			client.services().done(function (result) {
-				expect(result).to.eql(response.services);
+				expect(result).to.eql(response.result);
 				done();
 			});
 		});
@@ -63,7 +63,7 @@ describe('client', function () {
 	
 	describe('exports', function () {
 		it('should request exports list and handle response', function (done) {
-			var response = { id: 0, type: 'exports', exports: ['test1', 'test2'] };
+			var response = { id: 0, type: 'exports', result: ['test1', 'test2'] };
 			
 			socket.send = function (object) {
 				expect(object).to.eql({ id: 0, type: 'exports', service: 'TestService' });
@@ -71,7 +71,7 @@ describe('client', function () {
 			};
 			
 			client.exports('TestService').done(function (result) {
-				expect(result).to.eql(response.exports);
+				expect(result).to.eql(response.result);
 				done();
 			});
 		});
@@ -106,5 +106,9 @@ describe('client', function () {
 				done();
 			});
 		});
+	});
+	
+	describe('create', function () {
+		
 	});
 });
