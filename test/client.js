@@ -14,50 +14,46 @@ describe('client', function () {
 		client = io.remoting(socket);
 	});
 	
-	describe('services', function () {
-		it('should request service list and handle response', function (done) {
-			var response = { id: 0, type: 'services', result: ['TestService1', 'TestService2'] };
-			
-			socket.send = function (object) {
-				expect(object).to.eql({ id: 0, type: 'services' });
-				socket.emit('message', JSON.stringify(response));
-			};
-			
-			client.services().done(function (result) {
-				expect(result).to.eql(response.result);
-				done();
-			});
-		});
+	it('should request service list and handle response', function (done) {
+		var response = { id: 0, type: 'services', result: ['TestService1', 'TestService2'] };
 		
-		it('should handle error response', function (done) {
-			var response = { id: 0, type: 'error', name: 'Error', message: 'Test error' };
-			
-			socket.send = function (object) {
-				expect(object).to.eql({ id: 0, type: 'services' });
-				socket.emit('message', JSON.stringify(response));
-			};
-			
-			client.services().done(function () {
-			}, function (error) {
-				expect(error.name).to.be(response.name);
-				expect(error.message).to.be(response.message);
-				done();
-			});
-		});
+		socket.send = function (object) {
+			expect(object).to.eql({ id: 0, type: 'services' });
+			socket.emit('message', JSON.stringify(response));
+		};
 		
-		it('should handle bad response type', function (done) {
-			var response = { id: 0, type: 'bad' };
-			
-			socket.send = function (object) {
-				expect(object).to.eql({ id: 0, type: 'services' });
-				socket.emit('message', JSON.stringify(response));
-			};
-			
-			client.services().done(function () {
-			}, function (error) {
-				expect(error.name).to.be('InvalidResponse');
-				done();
-			});
+		client.services().then(function (result) {
+			expect(result).to.eql(response.result);
+			done();
+		});
+	});
+	
+	it('should handle error response', function (done) {
+		var response = { id: 0, type: 'error', name: 'Error', message: 'Test error' };
+		
+		socket.send = function (object) {
+			expect(object).to.eql({ id: 0, type: 'services' });
+			socket.emit('message', JSON.stringify(response));
+		};
+		
+		client.services().catch(function (error) {
+			expect(error.name).to.be(response.name);
+			expect(error.message).to.be(response.message);
+			done();
+		});
+	});
+	
+	it('should handle bad response type', function (done) {
+		var response = { id: 0, type: 'bad' };
+		
+		socket.send = function (object) {
+			expect(object).to.eql({ id: 0, type: 'services' });
+			socket.emit('message', JSON.stringify(response));
+		};
+		
+		client.services().catch(function (error) {
+			expect(error.name).to.be('InvalidResponse');
+			done();
 		});
 	});
 	
@@ -69,7 +65,7 @@ describe('client', function () {
 			socket.emit('message', JSON.stringify(response));
 		};
 		
-		client.exports('TestService').done(function (result) {
+		client.exports('TestService').then(function (result) {
 			expect(result).to.eql(response.result);
 			done();
 		});
