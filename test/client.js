@@ -81,6 +81,8 @@ describe('client', function () {
 		
 		client.instance('TestService').then(function (proxy) {
 			expect(proxy.constructor.name).to.be('Proxy');
+			expect(typeof(proxy.test1)).to.be('function');
+			expect(typeof(proxy.test2)).to.be('function');
 			done();
 		});
 	});
