@@ -131,20 +131,27 @@ module.exports = NamedError;
 },{}],4:[function(require,module,exports){
 'use strict';
 
-function proxyMethod(client, instanceId, method) {
-	return function () {
-		return client.invoke(instanceId, method, Array.prototype.slice.call(arguments));
-	};
-}
-
 function Proxy(client, instanceId, exports) {
+	this.client = client;
+	this.instanceId = instanceId;
+	
 	var that = this;
 	
 	for (var i = 0; i < exports.length; i++) {
 		var method = exports[i];
-		that[method] = proxyMethod(client, instanceId, method);
+		that[method] = this.registerMethod(method);
 	}
 }
+
+Proxy.prototype.registerMethod = function (method) {
+	return function () {
+		return this.client.invoke(this.instanceId, method, Array.prototype.slice.call(arguments));
+	};
+};
+
+Proxy.prototype.release = function () {
+	this.client.release(this.instanceId);
+};
 
 module.exports = Proxy;
 

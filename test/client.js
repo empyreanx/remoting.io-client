@@ -101,7 +101,7 @@ describe('client', function () {
 		});
 	});
 	
-	it('should request an instance and invoke method from proxy', function (done) {
+	it('should invoke method from proxy', function (done) {
 		var response = { id: 0, type: 'instance', result: { instance: 0, exports: ['test1', 'test2'] } };
 		
 		socket.send = function () {
@@ -122,12 +122,20 @@ describe('client', function () {
 		});
 	});
 	
-	it('should send request to release an instance', function (done) {
-		socket.send = function (object) {
-			expect(object).to.eql({ id: 0, type: 'release', instance: 0 });
-			done();
+	it('should release instance', function (done) {
+		var response = { id: 0, type: 'instance', result: { instance: 0, exports: ['test1', 'test2'] } };
+		
+		socket.send = function () {
+			socket.emit('message', JSON.stringify(response));
 		};
 		
-		client.release(0);
+		client.instance('TestService').then(function (proxy) {
+			socket.send = function (object) {
+				expect(object).to.eql({ id: 1, type: 'release', instance: 0 });
+				done();
+			};
+			
+			proxy.release();
+		});
 	});
 });
