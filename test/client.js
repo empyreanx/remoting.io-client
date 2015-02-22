@@ -101,9 +101,24 @@ describe('client', function () {
 		});
 	});
 	
-	describe('proxy', function () {
-		beforeEach(function () {
+	it('should invoke method from proxy', function (done) {
+		var response = { id: 0, type: 'instance', result: { instance: 0, exports: ['test1', 'test2'] } };
+		
+		socket.send = function () {
+			socket.emit('message', JSON.stringify(response));
+		};
+		
+		client.instance('TestService').then(function (proxy) {
+			socket.send = function (object) {
+				expect(object).to.eql({ id: 1, type: 'invoke', instance: 0, method: 'test1', args: ['arg1', 'arg2'] });
+				socket.emit('message', JSON.stringify({ id: 1, type: 'invoke', result: 'hello' }));
+				done();
+			};
 			
+			proxy.test1('arg1', 'arg2').then(function (result) {
+				expect(result).to.be('hello');
+				done();
+			});
 		});
 	});
 });
