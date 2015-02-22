@@ -94,6 +94,9 @@ Client.prototype.invoke = function (instanceId, method, args) {
 	return promise;
 };
 
+Client.prototype.release = function (instanceId) {
+	this.socket.send({ id: this.nextId(), type: 'release', instance: instanceId });
+};
 
 module.exports = Client;
 
