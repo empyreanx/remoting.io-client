@@ -19,14 +19,14 @@ Client.prototype.parse = function (message) {
 };
 
 Client.prototype.responsePromise = function (id, type) {
-	var that = this;
+	var self = this;
 	
 	return new Promise(function (resolve, reject) {
 		function handler(message) {
-			var response = that.parse(message);
+			var response = self.parse(message);
 			
 			if (response && response.id === id) {
-				that.socket.off('message', handler);
+				self.socket.off('message', handler);
 				
 				if (response.type === type) {
 					resolve(response.result);
@@ -38,7 +38,7 @@ Client.prototype.responsePromise = function (id, type) {
 			}
 		}
 		
-		that.socket.on('message', handler);
+		self.socket.on('message', handler);
 	});
 };
 
@@ -73,11 +73,11 @@ Client.prototype.instance = function (serviceName) {
 	
 	this.socket.send({ id: id, type: 'instance', service: serviceName });
 	
-	var that = this;
+	var self = this;
 	
 	return new Promise(function (resolve, reject) {
 		promise.then(function (result) {
-			resolve(new Proxy(that, result.instance, result.exports));
+			resolve(new Proxy(self, result.instance, result.exports));
 		}).catch(function (error) {
 			reject(error);
 		});
@@ -135,11 +135,11 @@ function Proxy(client, instanceId, exports) {
 	this.client = client;
 	this.instanceId = instanceId;
 	
-	var that = this;
+	var self = this;
 	
 	for (var i = 0; i < exports.length; i++) {
 		var method = exports[i];
-		that[method] = this.registerMethod(method);
+		self[method] = this.registerMethod(method);
 	}
 }
 
