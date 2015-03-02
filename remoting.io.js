@@ -105,14 +105,16 @@ if (window) {
 	window.io = window.io || {};
 	
 	window.io.remoting = function (socket) {
-		var Client = require('./client');
-		return new Client(socket);
+		return new window.io.remoting.Client(socket);
 	};
+	
+	window.io.remoting.Client = require('./client');
 } else {
-	module.exports = function (socket) {
-		var Client = require('./client');
-		return new Client(socket);
+	exports = module.exports = function (socket) {
+		return new exports.Client(socket);
 	};
+	
+	exports.Client = require('./client');
 }
 
 },{"./client":1}],3:[function(require,module,exports){
