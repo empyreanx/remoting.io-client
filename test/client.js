@@ -11,7 +11,7 @@ describe('client', function () {
 	
 	beforeEach(function () {
 		socket = new MockSocket();
-		client = io.remoting(socket);
+		client = rio(socket);
 	});
 	
 	it('should request service list and handle response', function (done) {

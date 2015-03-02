@@ -102,13 +102,11 @@ module.exports = Client;
 
 },{"./namederror":3,"./proxy":4,"es6-promise":5}],2:[function(require,module,exports){
 if (window) {
-	window.io = window.io || {};
-	
-	window.io.remoting = function (socket) {
-		return new window.io.remoting.Client(socket);
+	window.rio = function (socket) {
+		return new window.rio.Client(socket);
 	};
 	
-	window.io.remoting.Client = require('./client');
+	window.rio.Client = require('./client');
 } else {
 	exports = module.exports = function (socket) {
 		return new exports.Client(socket);
