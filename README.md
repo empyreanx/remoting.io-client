@@ -15,7 +15,7 @@ Because `Engine.IO` is connection oriented, services are stateful. This means se
 Because `Remoting.IO` is based on `Engine.IO`, it inherits the strengths of `Engine.IO`, such as multiple transports and resilience in the presence of proxies, load balancers, and firewalls.
 
 ## Installation
-Install `Engine.IO` and `Remoting.IO` with:
+Install the `Engine.IO` and `Remoting.IO` clients as follows:
 
 	npm install engine.io-client
 	npm install remoting.io-client
