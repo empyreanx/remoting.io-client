@@ -15,7 +15,7 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-      'remoting.io.js', 'test/**/*.js'
+      'dist/remoting.io.js', 'test/**/*.js'
     ],
 
 
