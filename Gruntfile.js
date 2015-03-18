@@ -34,9 +34,6 @@ module.exports = function(grunt) {
 			dev: {
 				files: {
 					'dist/remoting.io.js': ['lib/index.js']
-				},
-				options: {
-					debug: true
 				}
 			},
 			prod: {
@@ -51,7 +48,7 @@ module.exports = function(grunt) {
 		uglify: {
 			prod: {
 				files: {
-					'dist/remoting.io.js': 'tmp/remoting.io.js'
+					'dist/remoting.io.min.js': 'tmp/remoting.io.js'
 				}
 			}
 		},
@@ -68,7 +65,6 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-browserify');
 	grunt.loadNpmTasks('grunt-karma');
 	
-	grunt.registerTask('default', ['jshint', 'browserify:dev']);
-	grunt.registerTask('release', ['jshint', 'browserify:prod', 'uglify:prod']);
+	grunt.registerTask('default', ['jshint', 'browserify:dev', 'browserify:prod', 'uglify:prod']);
 	grunt.registerTask('test', ['jshint', 'browserify:dev', 'karma:unit']);
 };
