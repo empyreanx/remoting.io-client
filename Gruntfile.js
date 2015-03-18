@@ -33,7 +33,7 @@ module.exports = function(grunt) {
 		browserify: {
 			dev: {
 				files: {
-					'remoting.io.js': ['lib/index.js']
+					'dist/remoting.io.js': ['lib/index.js']
 				},
 				options: {
 					debug: true
@@ -51,7 +51,7 @@ module.exports = function(grunt) {
 		uglify: {
 			prod: {
 				files: {
-					'remoting.io.js': 'tmp/remoting.io.js'
+					'dist/remoting.io.js': 'tmp/remoting.io.js'
 				}
 			}
 		},

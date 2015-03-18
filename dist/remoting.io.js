@@ -22,7 +22,7 @@ Client.prototype.responsePromise = function (id, type) {
 	var self = this;
 	
 	return new Promise(function (resolve, reject) {
-		function handler(message) {
+		self.socket.on('message', function handler(message) {
 			var response = self.parse(message);
 			
 			if (response && response.id === id) {
@@ -36,9 +36,7 @@ Client.prototype.responsePromise = function (id, type) {
 					reject(new NamedError('InvalidResponse', 'Invalid response type'));
 				}
 			}
-		}
-		
-		self.socket.on('message', handler);
+		});
 	});
 };
 
@@ -66,7 +64,7 @@ Client.prototype.exports = function (serviceName) {
 	return promise;
 };
 
-Client.prototype.instance = function (serviceName) {
+Client.prototype.proxy = function (serviceName) {
 	var id = this.nextId();
 	
 	var promise = this.responsePromise(id, 'instance');
@@ -156,7 +154,7 @@ Proxy.prototype.registerMethod = function (method) {
 };
 
 Proxy.prototype.release = function () {
-	this.client.release(this.instanceId);
+	return this.client.release(this.instanceId);
 };
 
 module.exports = Proxy;

@@ -93,7 +93,7 @@ describe('client', function () {
 			socket.emit('message', JSON.stringify(response));
 		};
 		
-		client.instance('TestService').then(function (proxy) {
+		client.proxy('TestService').then(function (proxy) {
 			expect(proxy).to.be.an('object');
 			expect(proxy.test1).to.be.a('function');
 			expect(proxy.test2).to.be.a('function');
@@ -108,7 +108,7 @@ describe('client', function () {
 			socket.emit('message', JSON.stringify(response));
 		};
 		
-		client.instance('TestService').then(function (proxy) {
+		client.proxy('TestService').then(function (proxy) {
 			socket.send = function (object) {
 				expect(object).to.eql({ id: 1, type: 'invoke', instance: 0, method: 'test1', args: ['arg1', 'arg2'] });
 				socket.emit('message', JSON.stringify({ id: 1, type: 'invoke', result: 'hello' }));
@@ -129,7 +129,7 @@ describe('client', function () {
 			socket.emit('message', JSON.stringify(response));
 		};
 		
-		client.instance('TestService').then(function (proxy) {
+		client.proxy('TestService').then(function (proxy) {
 			socket.send = function (object) {
 				expect(object).to.eql({ id: 1, type: 'release', instance: 0 });
 				done();
