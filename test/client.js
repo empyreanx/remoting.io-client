@@ -18,7 +18,7 @@ describe('client', function () {
 		var response = { id: 0, type: 'services', result: ['TestService1', 'TestService2'] };
 		
 		socket.send = function (object) {
-			expect(object).to.eql({ id: 0, type: 'services' });
+			expect(object).to.eql(JSON.stringify({ id: 0, type: 'services' }));
 			socket.emit('message', JSON.stringify(response));
 		};
 		
@@ -32,7 +32,7 @@ describe('client', function () {
 		var response = { id: 0, type: 'error', name: 'Error', message: 'Test error' };
 		
 		socket.send = function (object) {
-			expect(object).to.eql({ id: 0, type: 'services' });
+			expect(object).to.eql(JSON.stringify({ id: 0, type: 'services' }));
 			socket.emit('message', JSON.stringify(response));
 		};
 		
@@ -47,7 +47,7 @@ describe('client', function () {
 		var response = { id: 0, type: 'bad' };
 		
 		socket.send = function (object) {
-			expect(object).to.eql({ id: 0, type: 'services' });
+			expect(object).to.eql(JSON.stringify({ id: 0, type: 'services' }));
 			socket.emit('message', JSON.stringify(response));
 		};
 		
@@ -61,7 +61,7 @@ describe('client', function () {
 		var response = { id: 0, type: 'exports', result: ['test1', 'test2'] };
 		
 		socket.send = function (object) {
-			expect(object).to.eql({ id: 0, type: 'exports', service: 'TestService' });
+			expect(object).to.eql(JSON.stringify({ id: 0, type: 'exports', service: 'TestService' }));
 			socket.emit('message', JSON.stringify(response));
 		};
 		
@@ -75,7 +75,7 @@ describe('client', function () {
 		var response = { id: 0, type: 'invoke', result: { a: 'a', bc: ['b', 'c'] } };
 		
 		socket.send = function (object) {
-			expect(object).to.eql({ id: 0, type: 'invoke', instance: 0, method: 'test', args: ['arg1', 'arg2'] });
+			expect(object).to.eql(JSON.stringify({ id: 0, type: 'invoke', instance: 0, method: 'test', args: ['arg1', 'arg2'] }));
 			socket.emit('message', JSON.stringify(response));
 		};
 		
@@ -89,7 +89,7 @@ describe('client', function () {
 		var response = { id: 0, type: 'instance', result: { instance: 0, exports: ['test1', 'test2'] } };
 		
 		socket.send = function (object) {
-			expect(object).to.eql({ id: 0, type: 'instance', service: 'TestService' });
+			expect(object).to.eql(JSON.stringify({ id: 0, type: 'instance', service: 'TestService' }));
 			socket.emit('message', JSON.stringify(response));
 		};
 		
@@ -110,7 +110,7 @@ describe('client', function () {
 		
 		client.proxy('TestService').then(function (proxy) {
 			socket.send = function (object) {
-				expect(object).to.eql({ id: 1, type: 'invoke', instance: 0, method: 'test1', args: ['arg1', 'arg2'] });
+				expect(object).to.eql(JSON.stringify({ id: 1, type: 'invoke', instance: 0, method: 'test1', args: ['arg1', 'arg2'] }));
 				socket.emit('message', JSON.stringify({ id: 1, type: 'invoke', result: 'hello' }));
 				done();
 			};
@@ -131,7 +131,7 @@ describe('client', function () {
 		
 		client.proxy('TestService').then(function (proxy) {
 			socket.send = function (object) {
-				expect(object).to.eql({ id: 1, type: 'release', instance: 0 });
+				expect(object).to.eql(JSON.stringify({ id: 1, type: 'release', instance: 0 }));
 				done();
 			};
 			

@@ -67,7 +67,7 @@ Client.prototype.services = function () {
 	
 	var promise = this.responsePromise(id, 'services');
 	
-	this.socket.send({ id: id, type: 'services' });
+	this.send({ id: id, type: 'services' });
 	
 	return promise;
 };
@@ -80,7 +80,7 @@ Client.prototype.exports = function (serviceName) {
 	
 	var promise = this.responsePromise(id, 'exports');
 	
-	this.socket.send({ id: id, type: 'exports', service: serviceName });
+	this.send({ id: id, type: 'exports', service: serviceName });
 	
 	return promise;
 };
@@ -93,7 +93,7 @@ Client.prototype.proxy = function (serviceName) {
 	
 	var promise = this.responsePromise(id, 'instance');
 	
-	this.socket.send({ id: id, type: 'instance', service: serviceName });
+	this.send({ id: id, type: 'instance', service: serviceName });
 	
 	var self = this;
 	
@@ -114,7 +114,7 @@ Client.prototype.invoke = function (instanceId, method, args) {
 	
 	var promise = this.responsePromise(id, 'invoke');
 	
-	this.socket.send({ id: id, type: 'invoke', instance: instanceId, method: method, args: args });
+	this.send({ id: id, type: 'invoke', instance: instanceId, method: method, args: args });
 	
 	return promise;
 };
@@ -128,7 +128,7 @@ Client.prototype.release = function (instanceId) {
 	
 	var promise = this.responsePromise(id, 'release');
 	
-	this.socket.send({ id: id, type: 'release', instance: instanceId });
+	this.send({ id: id, type: 'release', instance: instanceId });
 	
 	return promise;
 };
