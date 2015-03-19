@@ -5,19 +5,31 @@ var Promise = require('es6-promise').Promise;
 var Proxy = require('./proxy');
 var NamedError = require('./namederror');
 
+/*
+ * The Remoting.IO RPC client.
+ */
 function Client(socket) {
 	this.socket = socket;
 	this.id = 0;
 }
 
+/*
+ * Internal method for serializing an object to JSON and sending it.
+ */
 Client.prototype.send = function (object) {
 	this.socket.send(JSON.stringify(object));
 };
 
+/*
+ * Internal shortcut for parsing a JSON message.
+ */
 Client.prototype.parse = function (message) {
 	return JSON.parse(message);
 };
 
+/*
+ * Internal method that returns a promise which waits for a given response from the server.
+ */
 Client.prototype.responsePromise = function (id, type) {
 	var self = this;
 	
@@ -40,10 +52,16 @@ Client.prototype.responsePromise = function (id, type) {
 	});
 };
 
+/*
+ * Internal method for returning and incrementing the request ID.
+ */
 Client.prototype.nextId = function () {
 	return this.id++;
 };
 
+/*
+ * Returns a promise that resolves the list of services exposed by the server.
+ */
 Client.prototype.services = function () {
 	var id = this.nextId();
 	
@@ -54,6 +72,9 @@ Client.prototype.services = function () {
 	return promise;
 };
 
+/*
+ * Returns a promise that resolves the list of methods exported by a particular service.
+ */
 Client.prototype.exports = function (serviceName) {
 	var id = this.nextId();
 	
@@ -64,6 +85,9 @@ Client.prototype.exports = function (serviceName) {
 	return promise;
 };
 
+/*
+ * Returns a promise that resolves a proxy for a given service.
+ */
 Client.prototype.proxy = function (serviceName) {
 	var id = this.nextId();
 	
@@ -82,6 +106,9 @@ Client.prototype.proxy = function (serviceName) {
 	});
 };
 
+/*
+ * Internal method that returns a promise which resolves the result of a method invocation on the server.
+ */
 Client.prototype.invoke = function (instanceId, method, args) {
 	var id = this.nextId();
 	
@@ -92,6 +119,10 @@ Client.prototype.invoke = function (instanceId, method, args) {
 	return promise;
 };
 
+/*
+ * Internal method that releases an instance of a service held by a proxy. This methods returns
+ * a promise for consistency.
+ */
 Client.prototype.release = function (instanceId) {
 	var id = this.nextId();
 	
@@ -122,6 +153,10 @@ if (window) {
 },{"./client":1}],3:[function(require,module,exports){
 'use strict';
 
+/*
+ * Convenience class for specifying errors with names
+ * in addition to messages.
+ */
 function NamedError(name, message) {
 	this.name = name;
 	this.message = message;
@@ -135,6 +170,9 @@ module.exports = NamedError;
 },{}],4:[function(require,module,exports){
 'use strict';
 
+/*
+ * Encapsulates a proxy of a service exposed by the server.
+ */
 function Proxy(client, instanceId, exports) {
 	this.client = client;
 	this.instanceId = instanceId;
@@ -147,12 +185,21 @@ function Proxy(client, instanceId, exports) {
 	}
 }
 
+/*
+ * An internal method that creates a function which invokes the appropriate methods on
+ * the server.
+ */
 Proxy.prototype.registerMethod = function (method) {
 	return function () {
 		return this.client.invoke(this.instanceId, method, Array.prototype.slice.call(arguments));
 	};
 };
 
+/*
+ * Releases the instance associated with this proxy on the server. Note: all instances are
+ * released when the client disconnects (i.e. closes the webpage), so calling this method isn't
+ * required, but it is good practice.
+ */
 Proxy.prototype.release = function () {
 	return this.client.release(this.instanceId);
 };

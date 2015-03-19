@@ -20,18 +20,58 @@ Install the `Engine.IO` and `Remoting.IO` clients as follows:
 	npm install engine.io-client
 	npm install remoting.io-client
 
-## Usage
+## Server Example
 
-Assuming the server exposes a service named `TestService`, which exports a method named `test`, we can remotely request an instance of the service and call it's method as follows:
+Define a service as follows:
+
+```js
+function TestService(arg1, arg2) {
+	this.arg1 = arg1;
+	this.session['arg2'] = arg2;
+}
+
+TestService.prototype.test1 = function (str1, str2) {
+	return str1 + str2;
+};
+
+TestService.prototype.test2 = function () {
+	var self = this;
+
+	return new Promise(function (resolve) {
+		resolve(self.arg1 + self.session['arg2']);
+	});
+};
+
+TestService.exports = [ 'test1', 'test2' ];
+```
+
+Setup the RPC server as follows:
+
+```js
+var engine = require('engine.io');
+var remoting = require('remoting.io');
+
+var socketServer = engine.listen(80);
+var rpcServer = remoting(socketServer);
+
+rpcServer.addService('TestService', TestService, ['Hello', 'World!']);
+rpcServer.start();
+```
+
+When a client connects and requests an instance of `TestService`, `'Hello'` and `'World!'` will be passed into `arg1` and `arg2` of the service constructor respectively.
+
+## Client Example
+
+Using the server example above, we can remotely request an instance of the service and call it's method as follows:
 
 ```js
 var socket = eio('ws://localhost');
 var client = rio(socket);
 	
-client.instance('TestService').then(function (proxy) {
-	proxy.test('Hello', 'World!').then(function (result) {
+client.proxy('TestService').then(function (testService) {
+	testService.test1('Hello', 'World!').then(function (result) {
 		console.log(result);
-		proxy.release();
+		testService.release();
 	});	
 });
 ```
@@ -44,10 +84,10 @@ Using Browserify:
 var socket = require('engine.io-client')('ws://localhost');
 var client = require('remoting.io-client')(socket);
 	
-client.instance('TestService').then(function (proxy) {
-	proxy.test('Hello', 'World!').then(function (result) {
+client.proxy('TestService').then(function (testService) {
+	testService.test1('Hello', 'World!').then(function (result) {
 		console.log(result);
-		proxy.release();
+		testService.release();
 	});	
 });
 ```
@@ -69,7 +109,7 @@ client.instance('TestService').then(function (proxy) {
 	- **Parameters:**
 		- `serviceName`: the service
 
-- **instance**
+- **proxy**
 	- Returns a `Promise` containing a proxy of the service
 	- **Parameters:**
 		- `serviceName`: the service
@@ -77,7 +117,7 @@ client.instance('TestService').then(function (proxy) {
 #### Proxy
 	
 - **release**
-	- Releases the proxy. Should be called when the proxy is no longer in use.
+	- Releases the proxy. Should be called when the proxy is no longer in use. Note: the instance associated with a proxy is automatically released when the connection is closed.
 
 Head over to the `Remoting.IO` [server](https://github.com/jrimclean/remoting.io) repository for instructions on how to use the server.
 
