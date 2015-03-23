@@ -1,18 +1,16 @@
 {
   "name": "remoting.io-client",
   "description": "Simple and transparent remote procedure calls (RPC) using Engine.IO",
-  "version": "0.1.1",
-  "homepage": "http://remoting.io",
+  "version": "0.1.2",
   "author": {
     "name": "James McLean",
-    "url": "http://remoting.io"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/jrimclean/remoting.io.git"
+    "url": "git://github.com/jrimclean/remoting.io-client.git"
   },
   "bugs": {
-    "url": "https://github.com/jrimclean/remoting.io/issues"
+    "url": "https://github.com/jrimclean/remoting.io-client/issues"
   },
   "licenses": [
     {
